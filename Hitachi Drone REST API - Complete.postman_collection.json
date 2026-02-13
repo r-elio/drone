@@ -1,0 +1,1291 @@
+{
+  "info": {
+    "_postman_id": "9a91f385-4c1a-462e-be49-a50d816185fa",
+    "name": "Hitachi Drone REST API - Complete",
+    "description": "Comprehensive Postman collection for Hitachi Drone Delivery REST API with complete test scenarios covering all endpoints and edge cases.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21049082"
+  },
+  "item": [
+    {
+      "name": "1. Drone Registration",
+      "item": [
+        {
+          "name": "1.1 Register Drone - HEAVYWEIGHT Success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('serial_number');",
+                  "    pm.expect(jsonData).to.have.property('model');",
+                  "    pm.expect(jsonData).to.have.property('battery_capacity');",
+                  "    pm.expect(jsonData).to.have.property('state');",
+                  "});",
+                  "",
+                  "pm.test(\"Values are correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.serial_number).to.equal('DRONE-HW-001');",
+                  "    pm.expect(jsonData.model).to.equal('HEAVYWEIGHT');",
+                  "    pm.expect(jsonData.battery_capacity).to.equal(100);",
+                  "    pm.expect(jsonData.state).to.equal('IDLE');",
+                  "});",
+                  "",
+                  "pm.environment.set(\"registered_serial\", pm.response.json().serial_number);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-HW-001\",\n  \"model\": \"HEAVYWEIGHT\",\n  \"battery_capacity\": 100.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.2 Register Drone - MIDDLEWEIGHT Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-MW-001\",\n  \"model\": \"MIDDLEWEIGHT\",\n  \"battery_capacity\": 90.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.3 Register Drone - LIGHTWEIGHT Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-LW-001\",\n  \"model\": \"LIGHTWEIGHT\",\n  \"battery_capacity\": 85.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.4 Register Drone - CRUISERWEIGHT Success",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-CW-001\",\n  \"model\": \"CRUISERWEIGHT\",\n  \"battery_capacity\": 95.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.5 Register Drone - Duplicate Serial Number (409 Conflict)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Error message indicates duplicate\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.error).to.include('already exists');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-HW-001\",\n  \"model\": \"LIGHTWEIGHT\",\n  \"battery_capacity\": 80.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.6 Register Drone - Empty Serial Number (400 Bad Request)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"\",\n  \"model\": \"LIGHTWEIGHT\",\n  \"battery_capacity\": 80.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.7 Register Drone - Battery Exceeds 100 (400 Bad Request)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-INVALID-001\",\n  \"model\": \"LIGHTWEIGHT\",\n  \"battery_capacity\": 101.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.8 Register Drone - Negative Battery (400 Bad Request)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-NEGATIVE-001\",\n  \"model\": \"LIGHTWEIGHT\",\n  \"battery_capacity\": -50.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "1.9 Register Drone - Null Model (400 Bad Request)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-NULL-MODEL\",\n  \"model\": null,\n  \"battery_capacity\": 80.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Get Drones",
+      "item": [
+        {
+          "name": "2.1 Get All Drones",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response is array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.2 Get Drones by State - IDLE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"All returned drones are IDLE\", function () {",
+                  "    var drones = pm.response.json();",
+                  "    drones.forEach(function(drone) {",
+                  "        pm.expect(drone.state).to.equal('IDLE');",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones?state=IDLE",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "IDLE"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.3 Get Drones by State - LOADING",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones?state=LOADING",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "LOADING"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.4 Get Drones by State - LOADED",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones?state=LOADED",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "LOADED"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.5 Get Drones by State - DELIVERING",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones?state=DELIVERING",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "DELIVERING"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.6 Get Drones by State - DELIVERED",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones?state=DELIVERED",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "DELIVERED"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2.7 Get Drones by State - RETURNING",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones?state=RETURNING",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ],
+              "query": [
+                {
+                  "key": "state",
+                  "value": "RETURNING"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Get Individual Drone",
+      "item": [
+        {
+          "name": "3.1 Get Drone by Serial Number - Success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has drone data\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('serial_number');",
+                  "    pm.expect(jsonData).to.have.property('model');",
+                  "    pm.expect(jsonData).to.have.property('battery_capacity');",
+                  "    pm.expect(jsonData).to.have.property('state');",
+                  "    pm.expect(jsonData).to.have.property('medications');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3.2 Get Drone by Serial Number - Not Found (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test(\"Error message present\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.error).to.include('not found');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-NONEXISTENT",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-NONEXISTENT"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Load Medications",
+      "item": [
+        {
+          "name": "4.1 Load Single Medication - Success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Drone state changed to LOADING\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.state).to.equal('LOADING');",
+                  "});",
+                  "",
+                  "pm.test(\"Medications loaded\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.medications).to.be.an('array');",
+                  "    pm.expect(jsonData.medications.length).to.be.greaterThan(0);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin-500mg\",\n      \"weight\": 50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.2 Load Multiple Medications - Success",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Multiple medications loaded\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.medications.length).to.equal(3);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Ibuprofen-200mg\",\n      \"weight\": 60.0,\n      \"code\": \"IBU_001\",\n      \"image\": \"https://example.com/ibuprofen.jpg\"\n    },\n    {\n      \"name\": \"Amoxicillin-500mg\",\n      \"weight\": 75.0,\n      \"code\": \"AMX_001\",\n      \"image\": \"https://example.com/amoxicillin.jpg\"\n    },\n    {\n      \"name\": \"Metformin-850mg\",\n      \"weight\": 80.0,\n      \"code\": \"MET_001\",\n      \"image\": \"https://example.com/metformin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-MW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-MW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.3 Load Medication - Drone Not Found (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin 500mg\",\n      \"weight\": 50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-NOTFOUND/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-NOTFOUND",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.4 Load Medication - Empty Medications List (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": []\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.5 Load Medication - Invalid Medication Name (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Invalid@Name#123\",\n      \"weight\": 50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.6 Load Medication - Invalid Medication Code (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin 500mg\",\n      \"weight\": 50.0,\n      \"code\": \"asp_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.7 Load Medication - Negative Weight (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin 500mg\",\n      \"weight\": -50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.8 Load Medication - Invalid Image URL (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 Bad Request\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin 500mg\",\n      \"weight\": 50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"not-a-url\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.9 Load Medication - Battery Too Low (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Error mentions battery\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.error.toLowerCase()).to.include('battery');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin 500mg\",\n      \"weight\": 50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-LW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-LW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.10 Load Medication - Weight Exceeds Capacity (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Error mentions weight\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.error.toLowerCase()).to.include('weight');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Heavy Medication\",\n      \"weight\": 1500.0,\n      \"code\": \"HEAVY_001\",\n      \"image\": \"https://example.com/heavy.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-LW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-LW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4.11 Load Medication - Drone Not IDLE (409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 409 Conflict\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Error mentions state\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.error.toLowerCase()).to.include('idle');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Aspirin 500mg\",\n      \"weight\": 50.0,\n      \"code\": \"ASP_001\",\n      \"image\": \"https://example.com/aspirin.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-HW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-HW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. Workflow - Register, Load, and Check Drone",
+      "item": [
+        {
+          "name": "5.1.1 Register Workflow Drone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serial_number\": \"DRONE-WORKFLOW-001\",\n  \"model\": \"HEAVYWEIGHT\",\n  \"battery_capacity\": 100.0\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.1.2 Load Medications to Workflow Drone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\n    {\n      \"name\": \"Lisinopril-10mg\",\n      \"weight\": 40.0,\n      \"code\": \"LIS_001\",\n      \"image\": \"https://example.com/lisinopril.jpg\"\n    },\n    {\n      \"name\": \"Atorvastatin-20mg\",\n      \"weight\": 45.0,\n      \"code\": \"ATO_001\",\n      \"image\": \"https://example.com/atorvastatin.jpg\"\n    },\n    {\n      \"name\": \"Omeprazole-20mg\",\n      \"weight\": 35.0,\n      \"code\": \"OME_001\",\n      \"image\": \"https://example.com/omeprazole.jpg\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-WORKFLOW-001/medications",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-WORKFLOW-001",
+                "medications"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5.1.3 Check Workflow Drone Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Drone is in LOADING state with medications\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.state).to.equal('LOADING');",
+                  "    pm.expect(jsonData.medications.length).to.equal(3);",
+                  "    pm.expect(jsonData.current_weight).to.equal(120);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{baseUrl}}/api/drones/DRONE-WORKFLOW-001",
+              "protocol": "http",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "drones",
+                "DRONE-WORKFLOW-001"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "localhost:8080"
+    },
+    {
+      "key": "apiVersion",
+      "value": "v1"
+    },
+    {
+      "key": "serial_number",
+      "value": "DRONE-001"
+    }
+  ]
+}
